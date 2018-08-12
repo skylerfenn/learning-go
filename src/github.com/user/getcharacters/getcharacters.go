@@ -1,9 +1,9 @@
 package main
 
 import (
-        "gopkg.in/resty.v1"
-        "github.com/fatih/color"
-        "github.com/o1egl/govatar"
+    "gopkg.in/resty.v1"
+    "github.com/fatih/color"
+    "github.com/o1egl/govatar"
 	"encoding/json"
 	"strconv"
 )
@@ -46,23 +46,23 @@ func getStarWarsCharacters(page int) []Person {
 
 resty.SetHTTPMode()
 
-        var paginatedPeopleResponse PaginatedPeopleResponse
+    var paginatedPeopleResponse PaginatedPeopleResponse
 
-        resp, err := resty.R().Get("https://swapi.co/api/people?page=" + strconv.Itoa(page))
+    resp, err := resty.R().Get("https://swapi.co/api/people?page=" + strconv.Itoa(page))
 
-        if (err != nil || resp.StatusCode() != 200) {
+    if (err != nil || resp.StatusCode() != 200) {
 
+        color.Red("Error: %s", err)
+
+    } else {
+
+        if err := json.Unmarshal(resp.Body(), &paginatedPeopleResponse); err != nil {
             color.Red("Error: %s", err)
+        }
 
-        } else {
+    }
 
-            if err := json.Unmarshal(resp.Body(), &paginatedPeopleResponse); err != nil {
-                color.Red("Error: %s", err)
-            }   
-
-        } 
-
-        return paginatedPeopleResponse.Results
+    return paginatedPeopleResponse.Results
 }
 
 func printPeople(people []Person) {
